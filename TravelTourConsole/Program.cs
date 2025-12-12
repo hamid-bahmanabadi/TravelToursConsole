@@ -25,6 +25,9 @@ static void Start()
         {
             var registrationService=new RegistrationService();
             registrationService.Run();
+            
+            
+
         }
         else if (choice == "2")
         { 
