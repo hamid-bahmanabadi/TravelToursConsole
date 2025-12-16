@@ -2,6 +2,7 @@
 
 using TravelTourConsole.Services;
 
+
 Start();
 
 static void Start()
@@ -25,6 +26,8 @@ static void Start()
         {
             var registrationService=new RegistrationService();
             registrationService.Run();
+            
+           
             
             
 
