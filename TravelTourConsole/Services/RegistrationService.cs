@@ -1,169 +1,138 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace TravelTourConsole.Services
 {
-    public class RegistrationService
+    public partial class RegistrationService
     {
-       
+        List<User> users = new List<User>();
+        private int nextid = 1;
+        public RegistrationService() { }
         
 
-      private  List<User>users1=new List<User>();
-      private  int nextid = 1;
-        
+
+
+
 
         public void Run()
         {
             Console.Clear();
             Console.WriteLine("******* SubMenu *******");
-            Console.WriteLine("11.Registeration");
-            Console.WriteLine("12.show users");
-            Console.WriteLine("13.login");
-            Console.WriteLine("-11.Back to Main menu");
-            Console.Write(" enter your choice:");
+            Console.WriteLine("11_Registeration");
+            Console.WriteLine("12_ShowUser");
+            Console.WriteLine("13_Login");
+            Console.WriteLine("-11 Back to main menu");
+
             string choice = Console.ReadLine();
-            switch (choice)
-            {
-                case "11":
-                    Registeration();
+            switch (choice) {
+                case "11": Registeration();
                     break;
-                case "12":
-                    showusers();
+                case "12": ShowUser();
                     break;
-                case "13":
-                    Login();
+                case "13": Login();
                     break;
                 case "-11":
                     return;
-
             }
-
-            
-            
         }
-
-        class User
-        {
-            public string Fullname;
-            public string Username;
-            public int id;
-            public string Password;
-            public int phoneNumber;
-
-
-        }
-        public void Registeration()
-        {
-            Console.WriteLine("New user registration :");
-            
-           string Username= Console.ReadLine();
-            if (Username == " ")
+        public void Registeration() {
+            Console.WriteLine("New User Registration:");
+            string username = "";
+            Console.WriteLine("Enter username");
+            username = Console.ReadLine();
+            if (username == "")
             {
                 Console.WriteLine("Username cannot empty!");
-                Console.ReadLine();
 
-                if (UsernameExisist(Username))
-                {
-                    Console.WriteLine("This userename is already registered :");
-                    Console.ReadLine();
-                    return;
+            }
+            else if (UsernameExisist(username) == true) {
+                Console.WriteLine("This username is already Registed.");
+                username = "";
+            }
+            string Password = "";
+            while (Password == "") {
+                Console.WriteLine("Password");
+                Password = Console.ReadLine();
+                if (Password == "") {
+
+                    Console.WriteLine("Password cannot empty!");
+                }
+
+
+            }
+            string Fullname = "";
+            while (Fullname == "") {
+                Console.WriteLine("FullName:");
+                Fullname = Console.ReadLine();
+                if (Fullname == "") {
+                    Console.WriteLine("FullName cannot empty!");
                 }
             }
-            return;
-            Console.Write("Password :");
-            string Password = Console.ReadLine();
-            if (Password == " ")
-            {
-                Console.WriteLine("Pssword cannot empty!");
+            string Phoneinput = "";
+            int Phonenumber = 1;
+            while (Phoneinput == "") {
+                Console.WriteLine("Phone number:");
+                Phoneinput = Console.ReadLine();
+                if (Phoneinput == "")
+                {
+                    Console.WriteLine("Phone number cannot empty!");
+                }
+                else {
+                    Phonenumber = int.Parse(Phoneinput);
+                    Console.WriteLine("Registration completed successfully");
+                }
+
             }
-            Console.Write("Fullname :");
-            string Fullname = Console.ReadLine();
-
-            Console.Write(" Phone Number :");
-            int PhoneNumber = int.Parse(Console.ReadLine());
-
             var u = new User();
             u.id = nextid;
-            u.Username = Username;
+            u.Username = username;
             u.Password = Password;
             u.Fullname = Fullname;
-            u.phoneNumber = PhoneNumber;
-            nextid = nextid + 1;
-            users1.Add(u);
+            u.phoneNumber = Phonenumber;
 
-            Console.WriteLine("Registration is Succesful");
+            users.Add(u);
+            nextid++;
+
         }
-
-
-
-
-        private bool UsernameExisist(string username)
-        {
-            foreach (var u in users1)
-            {
-                if (u.Username == username)
+        private bool UsernameExisist(string namee) {
+            for (int i = 0; i < users.Count; i++) {
+                if (users[i].Username == namee)
                 {
                     return true;
-                   
                 }
-            } return false;
-
-        }
-
-        public void showusers()
-        {
-            if (users1.Count == 0)
-            {
-                Console.WriteLine("No user registed!");
-                return;
-                foreach (var u in users1)
-                {
-                    Console.WriteLine(u.id + "|" + u.Username + "|" + u.Fullname + "|" + u.phoneNumber);
-                }
-                return;
 
 
             }
-
-
+            return false;
+        }
+        public void ShowUser() {
+            if (users.Count == 0) {
+                Console.WriteLine("No user Registed!");
+            }
+            foreach (var u in users) {
+                Console.WriteLine(u.id + "|" + u.Username + "|" + u.Fullname + "|" + u.phoneNumber);
+            }
 
         }
-
-        private void Login()
+        public bool Login()
         {
-            Console.Write("username :");
+            Console.WriteLine("User Login:");
             string userName = Console.ReadLine();
-            User user = null;
-            foreach (var x in users1)
-            {
-                if (x.Username == userName)
-                {
-                    user = x;
-                    break;
-                    if (user == null)
-                    
-                        Console.WriteLine("user not found");
-
-                    
+            Console.WriteLine("PasswordL");
+            string password = Console.ReadLine();
+            for (int i = 0; i < users.Count; i++) {
+                if (users[i].Username == userName && users[i].Password == password) {
+                    Console.WriteLine("Login successful");
+                    return true;
                 }
-
-
             }
-            string pass = Console.ReadLine();
-            if (pass == user.Password)
-            {
-                Console.WriteLine("Login Succsessful");
-
-            }
-            else
-            {
-                Console.WriteLine("Password is wrong");
-            }
-
-
+            Console.WriteLine("Username or Password incorrect!");
+            return false;
         }
     }
 }
@@ -172,3 +141,9 @@ namespace TravelTourConsole.Services
 
 
 
+
+
+
+
+
+            
